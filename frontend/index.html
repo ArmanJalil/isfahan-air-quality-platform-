@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>مرکز پایش و کنترل کیفیت هوای شهر اصفهان</title>
+    <link rel="icon" href="assets/logo-center.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=30" />
+  </head>
+  <body>
+    <div class="page-symbol" aria-hidden="true"></div>
+
+    <header class="topbar hero-bar">
+      <div class="hero-sharp"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-inner">
+        <div class="hero-brand">
+          <img
+            src="assets/logo-full2.png"
+            class="hero-logo"
+            alt="مرکز پایش و کنترل کیفیت هوای شهر اصفهان"
+          />
+          <p class="hero-sub" data-i18n="heroSub">
+            سامانه پایش و پیش‌بینی برخط آلودگی هوای شهر اصفهان
+          </p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-wxtime">
+            <div class="hero-weather">
+              <span class="hw-icon" id="hwIcon"></span>
+              <div class="hw-text">
+                <div class="hw-temp" id="hwTemp">—</div>
+                <div class="hw-cond" id="hwCond"></div>
+                <div class="hw-loc" id="hwLoc" data-i18n="loc">
+                  اصفهان، ایران
+                </div>
+              </div>
+            </div>
+            <div class="hero-div"></div>
+            <div class="hero-clock">
+              <div class="hc-date" id="hcDate"></div>
+              <div class="hc-time" id="hcTime">—</div>
+            </div>
+          </div>
+          <button id="langBtn" class="hero-lang">FA | EN</button>
+          <button id="heroSearch" class="hero-search" aria-label="search">
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2.2"
+              stroke-linecap="round"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <line x1="21" y1="21" x2="16.5" y2="16.5" />
+            </svg>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div class="layout">
+      <!-- ============ SIDEBAR ============ -->
+      <aside class="sidebar">
+        <section class="card gauge-card">
+          <div class="card-head">
+            <h2 data-i18n="cityNow">کیفیت هوای کنونی شهر</h2>
+          </div>
+          <div id="cityGauge" class="gauge-svg"></div>
+          <div class="gauge-meta">
+            <div id="cityCat" class="gauge-cat">—</div>
+            <div class="gauge-sub">
+              <span data-i18n="dominant">آلاینده غالب</span>:
+              <b id="cityDom">—</b>
+            </div>
+            <div id="cityDate" class="gauge-date"></div>
+          </div>
+          <div class="mini-bars-wrap"><canvas id="cityMiniBars"></canvas></div>
+          <div class="mini-bars-label" data-i18n="miniBarsLabel">
+            ۲۴ ساعت گذشته و ۲۴ ساعت آینده
+          </div>
+        </section>
+
+        <section class="card stations-card">
+          <div class="card-head">
+            <h2 data-i18n="stationsHead">ایستگاه‌ها بر پایه شاخص</h2>
+            <span class="card-sub" data-i18n="stationsSub"
+              >بدترین وضعیت در بالا</span
+            >
+          </div>
+          <input
+            id="stSearch"
+            class="st-search"
+            type="search"
+            data-i18n-ph="searchPh"
+            placeholder="جست‌وجوی ایستگاه…"
+          />
+          <ul id="stList" class="st-list"></ul>
+        </section>
+      </aside>
+
+      <!-- ============ MAIN COLUMN ============ -->
+      <main class="main-col">
+        <section class="card map-card">
+          <div id="map"></div>
+          <div id="legend" class="legend"></div>
+          <div id="hovercard" class="hovercard hidden">
+            <div class="hc-title"></div>
+            <div class="hc-canvas-wrap">
+              <canvas class="hc-canvas"></canvas>
+            </div>
+            <div class="hc-hint" data-i18n="hoverHint">
+              برای جزئیات کلیک کنید
+            </div>
+          </div>
+        </section>
+
+        <!-- health advice -->
+        <section id="advice" class="advice">
+          <img src="assets/heart.png" class="adv-heart" alt="" />
+          <div class="adv-ico" id="adviceIco"></div>
+          <div class="adv-body">
+            <div class="adv-h" data-i18n="adviceTitle">توصیه سلامت</div>
+            <div class="adv-t" id="adviceText">…</div>
+          </div>
+        </section>
+
+        <!-- city hourly AQI + daily trend, side by side -->
+        <div class="chart-2col">
+          <section class="card">
+            <div class="card-head">
+              <h2 data-i18n="cityHourlyTitle">
+                شاخص ساعتی کیفیت هوای شهر — ۴۸ ساعت گذشته و ۲۴ ساعت آینده
+              </h2>
+            </div>
+            <div class="city-hourly-wrap">
+              <canvas id="cityHourlyChart"></canvas>
+            </div>
+          </section>
+          <section class="card">
+            <div class="card-head">
+              <h2 data-i18n="cityTitle">
+                شاخص روزانه کیفیت هوای شهر — هفته گذشته و سه روز آینده
+              </h2>
+            </div>
+            <div class="city-daily-wrap"><canvas id="cityChart"></canvas></div>
+          </section>
+        </div>
+
+        <!-- PM2.5 movie + weather, side by side -->
+        <div class="anim-wx">
+          <section class="card">
+            <div class="card-head">
+              <h2 data-i18n="animTitle">
+                پویانمایی تغییرات ذرات معلق ۲.۵ میکرومتری در سطح شهر
+              </h2>
+            </div>
+            <div id="animMap" class="anim-map"></div>
+            <div class="anim-controls">
+              <button id="animPlay" class="anim-btn" aria-label="play">
+                ▶
+              </button>
+              <input
+                id="animSlider"
+                type="range"
+                min="0"
+                max="0"
+                value="0"
+                step="1"
+              />
+              <span id="animLabel" class="anim-label"></span>
+            </div>
+            <div class="anim-legend" dir="ltr">
+              <div class="al-bar">
+                <span class="al-grad"></span>
+                <div class="al-ticks">
+                  <span style="left: 0%">0</span
+                  ><span style="left: 8%">12</span>
+                  <span style="left: 24%">35</span
+                  ><span style="left: 37%">55</span>
+                  <span style="left: 67%">100</span
+                  ><span style="left: 100%">150+</span>
+                </div>
+              </div>
+              <span class="al-unit">µg/m³</span>
+            </div>
+          </section>
+
+          <section class="card wx-card">
+            <div class="card-head">
+              <h2 data-i18n="weatherTitle">هواشناسی (فرودگاه)</h2>
+              <span class="card-sub" id="wxTime"></span>
+            </div>
+            <div id="wxRow" class="wx-row"></div>
+            <div class="wx-symbol" aria-hidden="true"></div>
+          </section>
+        </div>
+      </main>
+    </div>
+
+    <footer class="foot">
+      <img src="assets/logo-iut.png" class="foot-logo" alt="IUT" />
+      <span data-i18n="credit">طراحی و توسعه: دانشگاه صنعتی اصفهان</span>
+    </footer>
+
+    <script src="common.js?v=30"></script>
+    <script src="app.js?v=30"></script>
+  </body>
+</html>

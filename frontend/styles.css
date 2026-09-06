@@ -1,0 +1,499 @@
+/* ================================================================
+   Isfahan AQ — refined "monitoring center" theme.
+   Neutral cool-gray chrome so the official AQI colors carry meaning.
+   Desktop (sidebar + main column) and phone (stacked).
+   ================================================================ */
+:root{
+  --bg:#eef2f6; --bg-grad:radial-gradient(1200px 500px at 80% -10%,#e9f1f8 0%,#eef2f6 45%,#eaeef3 100%);
+  --card:#ffffff; --line:#e4eaf1; --line-strong:#d3dce6;
+  --ink:#1c2733; --ink-soft:#3a4757; --muted:#6b7887;
+  --brand:#0f6ea3; --brand-deep:#0b4f77; --brand-ink:#083b59;
+  --accent:#e8833a;                       /* forecast amber */
+  --ring-track:#e9eef4;
+  --shadow-sm:0 1px 2px rgba(16,42,67,.06);
+  --shadow:0 10px 30px rgba(16,42,67,.10);
+  --radius:14px; --radius-lg:18px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;font-family:Vazirmatn,Tahoma,"Segoe UI",sans-serif;
+  color:var(--ink);background:var(--bg);background-image:var(--bg-grad);
+  background-attachment:fixed;min-height:100vh;
+  -webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1,h2,h3{margin:0}
+a{text-decoration:none;color:inherit}
+:focus-visible{outline:2px solid var(--brand);outline-offset:2px;border-radius:6px}
+.hidden{display:none!important}
+
+/* ---------- header ---------- */
+.topbar{display:flex;justify-content:space-between;align-items:center;gap:10px;
+  background:linear-gradient(100deg,var(--brand-ink),var(--brand));color:#fff;
+  padding:12px 22px;box-shadow:0 1px 0 rgba(255,255,255,.06) inset,0 4px 18px rgba(8,40,64,.22);
+  border-bottom:3px solid rgba(255,255,255,.12)}
+.brand{display:flex;align-items:center;gap:14px;min-width:0}
+.logo-img{width:50px;height:50px;object-fit:contain;background:#fff;border-radius:12px;
+  padding:5px;box-shadow:0 2px 8px rgba(0,0,0,.2);flex:none}
+.titles{min-width:0}
+.titles h1{font-size:17px;font-weight:800;letter-spacing:.1px;white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.subtitle{font-size:12px;opacity:.86}
+.controls{display:flex;align-items:center;gap:12px;flex:none}
+.updated{font-size:11.5px;opacity:.85;display:inline-flex;align-items:center;gap:6px}
+.updated::before{content:"";width:7px;height:7px;border-radius:50%;background:#57e08a;
+  box-shadow:0 0 0 3px rgba(87,224,138,.25)}
+.lang-btn{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.5);
+  color:#fff;padding:7px 16px;border-radius:10px;cursor:pointer;font-weight:700;
+  font-family:inherit;font-size:13px;transition:background .15s}
+.lang-btn:hover{background:rgba(255,255,255,.26)}
+.back-btn{display:inline-flex;align-items:center;gap:6px}
+
+/* ---------- shared card ---------- */
+.card{background:var(--card);border-radius:var(--radius-lg);box-shadow:var(--shadow);
+  padding:16px;border:1px solid var(--line)}
+.card-head{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.card-head h2{font-size:15px;color:var(--brand-deep);font-weight:800;letter-spacing:.2px}
+.card-sub{font-size:11.5px;color:var(--muted)}
+
+/* ---------- layout: sidebar + main ---------- */
+.layout{max-width:1340px;margin:18px auto;padding:0 18px;display:grid;
+  grid-template-columns:340px minmax(0,1fr);gap:18px;align-items:start}
+.sidebar{position:sticky;top:18px;display:flex;flex-direction:column;gap:14px;
+  max-height:calc(100vh - 36px)}
+.main-col{display:flex;flex-direction:column;gap:18px;min-width:0}
+
+/* ---------- sidebar: current city ---------- */
+.city-now{display:flex;align-items:center;gap:16px}
+.cn-meta{min-width:0}
+.cn-cat{font-size:17px;font-weight:800;line-height:1.2}
+.cn-dom{font-size:12px;color:var(--muted);margin-top:4px}
+.cn-date{font-size:11.5px;color:var(--muted);margin-top:6px;display:inline-flex;
+  align-items:center;gap:6px}
+
+/* ---------- sidebar: station list ---------- */
+.stations-card{flex:1;min-height:0;display:flex;flex-direction:column;padding-bottom:8px}
+.st-search{width:100%;border:1px solid var(--line-strong);border-radius:10px;
+  padding:9px 12px;font-family:inherit;font-size:13px;color:var(--ink);
+  background:#f7f9fc;margin-bottom:8px}
+.st-search:focus{outline:none;border-color:var(--brand);background:#fff}
+.st-list{list-style:none;margin:0;padding:0;overflow-y:auto;flex:1;
+  scrollbar-width:thin;scrollbar-color:#cdd8e3 transparent}
+.st-list::-webkit-scrollbar{width:8px}
+.st-list::-webkit-scrollbar-thumb{background:#cdd8e3;border-radius:8px}
+.st-row{display:flex;align-items:center;gap:11px;padding:9px 10px;border-radius:11px;
+  cursor:pointer;border:1px solid transparent;transition:background .12s,border-color .12s}
+.st-row:hover,.st-row.active{background:#f1f6fb;border-color:var(--line)}
+.st-pill{flex:none;min-width:46px;height:34px;display:flex;align-items:center;
+  justify-content:center;border-radius:9px;font-weight:800;font-size:14px;
+  box-shadow:inset 0 0 0 1px rgba(0,0,0,.06)}
+.st-body{flex:1;min-width:0}
+.st-name{font-size:13.5px;font-weight:600;color:var(--ink);white-space:nowrap;
+  overflow:hidden;text-overflow:ellipsis}
+.st-cat{font-size:11px;color:var(--muted);margin-top:1px}
+.st-empty{color:var(--muted);font-size:12.5px;text-align:center;padding:24px 0}
+
+/* ---------- map ---------- */
+.map-card{padding:0;overflow:hidden;position:relative}
+#map{height:56vh;min-height:420px;width:100%}
+.legend{position:absolute;bottom:14px;z-index:500;background:rgba(255,255,255,.96);
+  border:1px solid var(--line);border-radius:12px;padding:10px 12px;
+  box-shadow:var(--shadow);font-size:12px;backdrop-filter:blur(4px)}
+html[dir=rtl] .legend{right:14px} html[dir=ltr] .legend{left:14px}
+.legend .lg-title{font-size:11px;font-weight:800;color:var(--brand-deep);
+  text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px}
+.legend .row{display:flex;align-items:center;gap:8px;margin:3px 0}
+.legend .sw{width:14px;height:14px;border-radius:4px;border:1px solid rgba(0,0,0,.12);flex:none}
+
+/* AQI badge markers */
+.aqi-badge{display:flex;align-items:center;justify-content:center;border-radius:50%;
+  font-weight:800;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.32);
+  font-size:13px;transition:transform .12s,box-shadow .12s}
+.aqi-badge:hover,.aqi-badge.mk-hi{transform:scale(1.22);
+  box-shadow:0 4px 14px rgba(0,0,0,.4),0 0 0 4px rgba(15,110,163,.25)}
+
+/* hovercard */
+.hovercard{position:fixed;z-index:1200;background:#fff;border-radius:14px;
+  padding:11px 13px;box-shadow:0 12px 34px rgba(16,42,67,.26);pointer-events:none;
+  width:300px;border:1px solid var(--line)}
+.hovercard .hc-title{font-weight:800;font-size:12.5px;margin-bottom:6px;color:var(--brand-deep)}
+.hc-canvas-wrap{height:120px}
+.hc-hint{font-size:11px;color:var(--muted);text-align:center;margin-top:5px}
+
+/* ---------- gauge (svg) ---------- */
+.gauge .gauge-num{font-family:inherit;font-weight:800;fill:var(--ink);
+  font-variant-numeric:tabular-nums}
+.gauge .gauge-sub{font-size:9px;fill:var(--muted);text-anchor:middle}
+
+/* ---------- city trend chart ---------- */
+.city-chart-wrap{height:270px}
+
+/* ---------- station page ---------- */
+.hero-card{display:flex;align-items:center;gap:22px;
+  background:linear-gradient(120deg,#ffffff 55%,#eef6fc 100%)}
+.hero-gauge{flex:none;filter:drop-shadow(0 6px 12px rgba(16,42,67,.14))}
+.hero-main{min-width:0;flex:1}
+.hero-name{font-size:22px;font-weight:800;margin-bottom:8px;color:var(--ink)}
+.hero-meta-row{display:flex;flex-wrap:wrap;gap:8px 22px;align-items:baseline}
+.hero-k{font-size:12px;color:var(--muted)}
+.hero-cat{font-size:17px;font-weight:800}
+.hero-dom{font-size:12.5px;color:var(--muted)}
+
+.daily-chart-wrap{height:290px}
+
+.poll-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(330px,1fr));gap:14px}
+.poll-card{background:#fbfdff;border:1px solid var(--line);border-radius:14px;padding:13px}
+.poll-card .ph-t{display:flex;justify-content:space-between;align-items:center;
+  margin-bottom:8px;gap:8px}
+.poll-card .ph-name{font-size:15px;font-weight:800;color:var(--brand-deep)}
+.poll-card .ph-u{font-size:11px;color:var(--muted);font-weight:600}
+.poll-tag{font-size:10px;font-weight:700;padding:3px 8px;border-radius:20px;
+  letter-spacing:.2px}
+.poll-tag.fc{background:rgba(232,131,58,.14);color:#b6611f}
+.poll-tag.obs{background:rgba(15,110,163,.12);color:var(--brand-deep)}
+.poll-canvas-wrap{height:200px}
+
+/* ---------- PM2.5 movie ---------- */
+.anim-map{height:400px;border-radius:12px;overflow:hidden;border:1px solid var(--line)}
+.anim-controls{display:flex;align-items:center;gap:12px;margin-top:12px}
+.anim-btn{width:42px;height:42px;border-radius:12px;border:none;cursor:pointer;
+  background:var(--brand);color:#fff;font-size:15px;flex:none;box-shadow:var(--shadow-sm);
+  transition:background .15s}
+.anim-btn:hover{background:var(--brand-deep)}
+#animSlider{flex:1;accent-color:var(--brand)}
+.anim-label{font-size:13px;font-weight:700;min-width:180px;text-align:center;
+  background:#eef4fa;border:1px solid var(--line);border-radius:10px;padding:7px 10px}
+.anim-label .fc-tag{color:var(--accent);font-weight:800}
+.anim-legend{display:flex;align-items:flex-start;gap:12px;margin-top:12px;
+  font-size:11px;color:var(--muted)}
+.al-bar{position:relative;width:260px;max-width:70vw;padding-bottom:16px}
+.al-grad{display:block;width:100%;height:12px;border-radius:6px;border:1px solid rgba(0,0,0,.12);
+  background:linear-gradient(90deg,#00B050 0%,#7ED957 8%,#FFD700 24%,#FF7E00 37%,#FF0000 67%,#8F3F97 100%)}
+.al-ticks{position:absolute;left:0;right:0;top:14px;height:14px}
+.al-ticks span{position:absolute;transform:translateX(-50%);font-size:10.5px;
+  font-weight:700;color:var(--muted);white-space:nowrap}
+.al-ticks span:first-child{transform:translateX(0)}
+.al-ticks span:last-child{transform:translateX(-100%)}
+.al-unit{font-weight:700;margin-top:1px}
+
+/* ---------- footer ---------- */
+.foot{display:flex;align-items:center;justify-content:center;gap:10px;
+  color:var(--muted);font-size:12.5px;padding:22px;opacity:.9}
+.foot-logo{width:32px;height:32px;object-fit:contain;opacity:.85}
+
+/* ---------- tablet ---------- */
+@media(max-width:960px){
+  .layout{grid-template-columns:1fr}
+  .sidebar{position:static;max-height:none}
+  .stations-card{flex:none}
+  .st-list{max-height:340px}
+}
+
+/* ---------- phone ---------- */
+@media(max-width:680px){
+  .titles h1{font-size:13.5px;white-space:normal}
+  .subtitle{display:none}
+  .logo-img{width:40px;height:40px}
+  .updated{display:none}
+  .layout{padding:0 12px;margin:12px auto;gap:12px}
+  #map{height:46vh;min-height:300px}
+  .city-chart-wrap{height:220px}
+  .hero-card{gap:14px}
+  .hero-name{font-size:18px}
+  .daily-chart-wrap{height:240px}
+  .poll-grid{grid-template-columns:1fr}
+  .anim-map{height:300px}
+  .anim-label{min-width:120px;font-size:11px}
+  .hovercard{display:none!important}
+}
+
+/* ---------- reduced motion ---------- */
+@media(prefers-reduced-motion:reduce){
+  *{transition:none!important}
+  .gauge circle{transition:none!important}
+}
+
+/* empty-state note inside a chart panel */
+.chart-empty{display:flex;align-items:center;justify-content:center;height:100%;
+  min-height:120px;color:var(--muted);font-size:13px;text-align:center;
+  border:1px dashed var(--line-strong);border-radius:12px;background:#f7f9fc}
+
+/* ================= v10: hourly AQI, weather, advice, wider layout ================= */
+/* bigger, more prominent logo */
+.topbar{padding:14px 24px}
+.logo-img{width:64px;height:64px;border-radius:14px;padding:6px}
+.titles h1{font-size:19px}
+.subtitle{font-size:12.5px}
+
+/* two charts side by side inside the main column */
+.chart-2col{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+@media(max-width:1100px){ .chart-2col{grid-template-columns:1fr} }
+
+/* hourly AQI chart height */
+.haqi-wrap{height:250px}
+.city-hourly-wrap,.city-daily-wrap{height:240px}
+
+/* current-city card: face gauge + big number */
+.cn-gauge{flex:none}
+.cn-figure{display:flex;align-items:center;gap:14px}
+.cn-num{font-size:38px;font-weight:800;line-height:1;color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* health advice banner */
+.advice{display:flex;align-items:flex-start;gap:12px;border-radius:14px;padding:13px 15px;
+  border:1px solid var(--line);border-inline-start:6px solid var(--muted);background:#fff}
+.advice .adv-ico{flex:none;margin-top:1px}
+.advice .adv-body{min-width:0}
+.advice .adv-h{font-size:12px;font-weight:800;letter-spacing:.3px;text-transform:uppercase;
+  color:var(--muted);margin-bottom:3px}
+.advice .adv-t{font-size:14px;font-weight:600;color:var(--ink);line-height:1.5}
+
+/* weather tiles */
+.wx-row{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+@media(max-width:760px){ .wx-row{grid-template-columns:repeat(2,1fr)} }
+.wx-tile{background:#fbfdff;border:1px solid var(--line);border-radius:13px;padding:12px 10px;
+  display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center}
+.wx-ico{color:var(--brand-deep)}
+.wx-val{font-size:19px;font-weight:800;color:var(--ink);font-variant-numeric:tabular-nums}
+.wx-lbl{font-size:11px;color:var(--muted);font-weight:600}
+.wx-time{font-size:11px;color:var(--muted)}
+
+/* station-page weather strip */
+.stwx{display:flex;flex-wrap:wrap;gap:10px 22px;align-items:center;margin-top:12px;
+  padding-top:12px;border-top:1px dashed var(--line-strong)}
+.stwx .item{display:flex;align-items:center;gap:7px;font-size:13px;color:var(--ink-soft)}
+.stwx .item b{font-weight:800;color:var(--ink)}
+
+/* AQI colored line chart legend swatch inside titles */
+.hint-now{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:var(--muted)}
+.hint-now .dash{width:16px;height:0;border-top:2px dashed var(--accent)}
+
+/* v11: keep numeric value+unit in LTR order inside RTL cards */
+.wx-val{direction:ltr;unicode-bidi:isolate}
+.stwx .item b{direction:ltr;unicode-bidi:isolate}
+
+/* ================= v13: full logo, weather beside animation, city symbol ================= */
+/* full department logo (with its own text) — large & readable on a white badge */
+.logo-full{height:104px;width:auto;object-fit:contain;flex:none;
+  background:#fff;border-radius:14px;padding:6px 12px;box-shadow:0 2px 12px rgba(0,0,0,.18)}
+.topbar{align-items:center}
+.brand{gap:18px}
+
+/* legend expression faces */
+.legend .lg-face{display:inline-flex;flex:none}
+.legend .row{gap:9px}
+
+/* PM2.5 animation + weather, side by side */
+.anim-wx{display:grid;grid-template-columns:1.7fr 1fr;gap:18px;align-items:stretch}
+@media(max-width:1100px){ .anim-wx{grid-template-columns:1fr} }
+.wx-card{display:flex;flex-direction:column}
+.wx-card .wx-row{grid-template-columns:1fr;gap:10px;flex:1;align-content:start}
+.wx-card .wx-tile{flex-direction:row;align-items:center;justify-content:flex-start;
+  gap:12px;text-align:start;padding:12px 14px}
+.wx-card .wx-tile .wx-lbl{font-size:12.5px}
+.wx-card .wx-tile .wx-val{margin-inline-start:auto;font-size:17px}
+
+/* Isfahan city symbol — faint background watermark on the main page */
+.page-symbol{position:fixed;left:0;bottom:0;width:min(40vw,440px);height:min(40vw,440px);
+  background:url("assets/isfahan-symbol.png") no-repeat left bottom/contain;
+  opacity:.08;z-index:-1;pointer-events:none;
+  -webkit-mask-image:linear-gradient(to top right,#000 30%,transparent 78%);
+          mask-image:linear-gradient(to top right,#000 30%,transparent 78%)}
+
+@media(max-width:680px){
+  .logo-full{height:64px;padding:4px 8px}
+  .page-symbol{width:70vw;height:70vw;opacity:.06}
+}
+
+/* v13b: bigger logo + Isfahan archer as a visible header emblem */
+.logo-full{height:120px}
+.topbar{position:relative;overflow:hidden}
+.topbar::after{content:"";position:absolute;top:50%;inset-inline-start:44%;
+  transform:translateY(-46%);width:165px;height:120px;
+  background:url("assets/isfahan-symbol.png") no-repeat center/contain;
+  opacity:.18;pointer-events:none;z-index:0}
+.topbar .brand,.topbar .controls{position:relative;z-index:1}
+/* keep a faint corner watermark too (shows in side gutters on wide screens) */
+.page-symbol{opacity:.06}
+@media(max-width:900px){ .topbar::after{display:none} }
+
+/* ================= v14: needle gauge card + heart advice ================= */
+.gauge-card{text-align:center}
+.gauge-card .card-head{justify-content:center}
+.gauge-svg{max-width:300px;margin:0 auto}
+.gauge-svg svg{display:block;width:100%;height:auto}
+.gauge-meta{margin-top:2px}
+.gauge-cat{font-size:16px;font-weight:800;line-height:1.35}
+.gauge-sub{font-size:12.5px;color:var(--muted);margin-top:5px}
+.gauge-sub b{color:var(--ink);font-weight:800}
+.gauge-date{font-size:11.5px;color:var(--muted);margin-top:3px}
+.mini-bars-wrap{height:58px;margin-top:14px}
+.mini-bars-label{font-size:11px;color:var(--muted);margin-top:5px;font-weight:700;text-align:center}
+
+/* health advice: heart icon + colored card */
+.adv-heart{width:42px;height:42px;flex:none;border-radius:50%;object-fit:cover;
+  box-shadow:0 2px 8px rgba(0,0,0,.18)}
+.advice{align-items:center;transition:background .2s}
+
+/* ================= v17: section titles in a rounded chip (#B6D0E2) ================= */
+.card-head{display:inline-flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  background:#B6D0E2;border-radius:12px;padding:7px 14px;margin-bottom:12px;max-width:100%}
+.card-head h2{color:#0b3550}                 /* strong contrast on #B6D0E2 */
+.card-head .card-sub{color:#274a5e}
+.gauge-card .card-head{justify-content:center}
+/* legend title chip */
+.legend .lg-title{display:inline-block;background:#B6D0E2;color:#0b3550;
+  border-radius:8px;padding:3px 10px;margin-bottom:8px;text-transform:none;letter-spacing:0}
+
+/* ================= v18: artistic legend, bottom-right corner ================= */
+.legend{position:absolute;bottom:12px;z-index:500;padding:12px 12px 11px;
+  background:rgba(255,255,255,.80);backdrop-filter:blur(9px);-webkit-backdrop-filter:blur(9px);
+  border:1px solid rgba(255,255,255,.65);border-radius:16px;
+  box-shadow:0 12px 32px rgba(16,42,67,.20);font-size:12px}
+html[dir=rtl] .legend{right:12px;left:auto} html[dir=ltr] .legend{left:12px;right:auto}
+.legend .row{display:flex;align-items:center;gap:9px;padding:5px 11px 5px 8px;
+  border-radius:999px;margin:5px 0;border:1px solid transparent;transition:transform .12s ease}
+.legend .row:hover{transform:scale(1.03)}
+.legend .lg-face{flex:none;display:inline-flex;line-height:0}
+.legend .lg-name{font-weight:700;color:var(--ink);white-space:nowrap}
+.legend .lg-range{margin-inline-start:auto;padding-inline-start:14px;font-size:11px;font-weight:800;
+  color:var(--ink-soft);font-variant-numeric:tabular-nums;direction:ltr}
+/* Leaflet attribution: quieter now that it sits bottom-left */
+.map-card .leaflet-control-attribution{background:rgba(255,255,255,.6);font-size:10px;
+  border-radius:0 8px 0 0;padding:1px 6px}
+
+/* ================= v19: compact + collapsible legend ================= */
+.legend{padding:9px 10px 8px;max-width:250px}
+.legend .lg-title{cursor:pointer;border:none;font-family:inherit;font-size:12px;font-weight:800;
+  display:inline-flex;align-items:center;gap:7px;line-height:1.6}
+.legend .lg-caret{font-size:10px;transition:transform .15s}
+.legend.collapsed .lg-caret{transform:rotate(-90deg)}
+.legend.collapsed .lg-title{margin-bottom:0}
+.legend.collapsed .lg-body{display:none}
+.legend .lg-body .row{padding:3px 9px 3px 6px;margin:4px 0;gap:8px}
+.legend .lg-name{font-size:12px}
+.legend .lg-range{font-size:11px;padding-inline-start:12px}
+@media(max-width:680px){
+  .legend{max-width:62vw;padding:8px 9px}
+  .legend .lg-name{font-size:11.5px}
+  .legend .lg-range{font-size:10.5px}
+}
+
+/* ================= v20: panorama header ribbon ================= */
+.hero-bar{position:relative;overflow:hidden;padding:0;border-bottom:3px solid rgba(255,255,255,.14);
+  background:#0b2d4a url("assets/hero-isfahan.jpg") center/cover no-repeat;min-height:120px}
+.hero-bar::after{content:none!important}          /* remove the archer emblem here */
+.hero-overlay{position:absolute;inset:0;
+  background:linear-gradient(90deg, rgba(9,34,56,.40) 0%, rgba(9,34,56,.62) 52%, rgba(9,34,56,.90) 100%)}
+html[dir=ltr] .hero-overlay{background:linear-gradient(270deg, rgba(9,34,56,.40) 0%, rgba(9,34,56,.62) 52%, rgba(9,34,56,.90) 100%)}
+.hero-inner{position:relative;z-index:1;display:flex;align-items:center;justify-content:space-between;
+  gap:18px;max-width:1340px;margin:0 auto;padding:14px 24px;min-height:120px;color:#fff}
+.hero-brand{display:flex;align-items:center;gap:14px;min-width:0}
+.hero-logo{width:56px;height:56px;object-fit:contain;background:#fff;border-radius:12px;padding:4px;
+  box-shadow:0 2px 10px rgba(0,0,0,.3);flex:none}
+.hero-title{font-size:27px;font-weight:800;letter-spacing:.2px;margin:0;line-height:1.2;
+  text-shadow:0 1px 6px rgba(0,0,0,.4)}
+.hero-sub{font-size:14px;margin:4px 0 0;opacity:.92;text-shadow:0 1px 4px rgba(0,0,0,.4)}
+.hero-right{display:flex;align-items:center;gap:16px;flex:none}
+.hero-weather{display:flex;align-items:center;gap:11px}
+.hw-icon{flex:none;line-height:0;filter:drop-shadow(0 1px 3px rgba(0,0,0,.4))}
+.hw-text{line-height:1.25}
+.hw-temp{font-size:22px;font-weight:800}
+.hw-cond{font-size:13px;opacity:.95}
+.hw-loc{font-size:11.5px;opacity:.8}
+.hero-div{width:1px;height:46px;background:rgba(255,255,255,.35);flex:none}
+.hero-clock{text-align:center;min-width:96px}
+.hc-date{font-size:12px;opacity:.85}
+.hc-time{font-size:22px;font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums}
+.hero-lang{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.5);color:#fff;
+  border-radius:10px;padding:8px 14px;cursor:pointer;font-family:inherit;font-weight:700;font-size:13.5px;
+  white-space:nowrap;transition:background .15s;display:inline-flex;align-items:center}
+.hero-lang:hover{background:rgba(255,255,255,.28)}
+.hero-search{width:42px;height:42px;border-radius:12px;border:1px solid rgba(255,255,255,.5);
+  background:rgba(255,255,255,.14);color:#fff;cursor:pointer;display:inline-flex;align-items:center;
+  justify-content:center;transition:background .15s;flex:none}
+.hero-search:hover{background:rgba(255,255,255,.28)}
+.hero-script{position:absolute;z-index:1;bottom:7px;font-family:'Segoe Script','Brush Script MT','Snell Roundhand',cursive;
+  font-size:23px;color:rgba(255,255,255,.9);pointer-events:none;text-shadow:0 1px 6px rgba(0,0,0,.45)}
+html[dir=rtl] .hero-script{left:26px} html[dir=ltr] .hero-script{right:26px}
+
+@media(max-width:900px){
+  .hero-script{display:none}
+  .hero-right{gap:12px}
+  .hero-clock{min-width:80px}
+}
+@media(max-width:680px){
+  .hero-bar{min-height:auto}
+  .hero-inner{flex-wrap:wrap;gap:10px 14px;padding:12px 14px;min-height:auto}
+  .hero-brand{gap:10px}
+  .hero-logo{width:44px;height:44px}
+  .hero-title{font-size:18px}
+  .hero-sub{font-size:11.5px}
+  .hero-right{gap:12px;flex-wrap:wrap}
+  .hw-temp{font-size:18px}.hc-time{font-size:18px}
+  .hero-div{display:none}
+}
+
+/* ================= v21: full-height panorama (blur sides), big logo, no center ================= */
+.hero-bar{background:#0b2d4a}                     /* base colour; image drawn in layers below */
+.hero-bar::before{content:"";position:absolute;inset:-26px;z-index:0;
+  background:url("assets/hero-isfahan.jpg") center/cover no-repeat;filter:blur(18px);transform:scale(1.06)}
+.hero-sharp{position:absolute;inset:0;z-index:0;
+  background:url("assets/hero-isfahan.jpg") center/auto 100% no-repeat}
+.hero-overlay{z-index:1}
+.hero-inner{z-index:2}
+/* bigger logo on the right; subtitle bigger; nothing in the centre (space-between) */
+.hero-logo{width:auto;height:94px;border-radius:14px;padding:6px 12px;background:#fff}
+.hero-sub{font-size:19px;font-weight:700;margin:0;line-height:1.45}
+.hero-inner{min-height:126px}
+.hero-bar{min-height:126px}
+@media(max-width:680px){
+  .hero-logo{height:60px;padding:4px 8px}
+  .hero-sub{font-size:14px}
+  .hero-inner{min-height:auto}
+}
+
+/* ================= v22: corrected panorama (blur baked in), elements hug the edges ================= */
+.hero-bar::before{content:none!important}          /* image already has blurred sides — no extra blur layer */
+.hero-sharp{background:url("assets/hero-isfahan.jpg") center/cover no-repeat}   /* fill ribbon edge to edge */
+.hero-inner{max-width:none;padding:14px 26px}      /* no centring cap: brand to one edge, controls to the other */
+@media(max-width:680px){
+  .hero-inner{padding:12px 14px}
+}
+
+/* ================= v23: bigger logo; brand pinned to the right edge, controls to the left edge ================= */
+.hero-logo{height:118px}                            /* larger department logo */
+.hero-inner{padding:12px 12px;min-height:150px}     /* minimum gap to both ribbon edges (desktop) */
+.hero-bar{min-height:150px}
+@media(max-width:680px){
+  .hero-logo{height:64px}
+  .hero-inner{padding:12px 12px;min-height:auto}
+}
+
+/* ================= v24: header is a flex row, so make .hero-inner fill the whole width =================
+   (it was shrinking to content and centring via margin:auto — that's why everything looked centred) */
+.hero-inner{flex:1 1 auto;width:100%;margin:0}      /* stretch edge to edge; space-between then pins the two groups */
+
+/* ================= v25: weather on top, a line, then date/time below (vertical stack) ================= */
+.hero-wxtime{display:flex;flex-direction:column;align-items:stretch;gap:7px}
+.hero-wxtime .hero-div{width:100%;height:1px;background:rgba(255,255,255,.4)}   /* horizontal separator */
+.hero-wxtime .hero-weather{justify-content:flex-start}
+.hero-wxtime .hero-clock{text-align:center}
+@media(max-width:680px){
+  .hero-wxtime{gap:5px}
+}
+
+/* ================= v26: transparent department logo, full ribbon height, no card ================= */
+.hero-bar,.hero-inner{min-height:160px}
+.hero-inner{padding-top:0;padding-bottom:0}          /* let the logo reach top & bottom of the ribbon */
+.hero-logo{height:160px;width:auto;padding:0;background:transparent;border-radius:0;box-shadow:none;
+  filter:drop-shadow(0 2px 6px rgba(0,0,0,.45))}     /* keep it legible over the panorama */
+@media(max-width:680px){
+  .hero-bar,.hero-inner{min-height:96px}
+  .hero-logo{height:96px}
+}
+
+/* ================= v28: timeframe sub-part of a header, lighter & smaller (no dash) ================= */
+.h-sub{font-weight:500;font-size:.78em;color:var(--muted);opacity:.9;margin-inline-start:6px}
+
+/* ================= v27: Isfahan archer emblem fills the spare space in the weather card ================= */
+.wx-card .wx-row{flex:0 0 auto}                        /* tiles keep their natural height */
+.wx-symbol{flex:1 1 auto;min-height:150px;margin-top:14px;
+  background:url("assets/isfahan-symbol.png") no-repeat center/contain;opacity:.9}
+@media(max-width:1100px){ .wx-symbol{min-height:180px} }

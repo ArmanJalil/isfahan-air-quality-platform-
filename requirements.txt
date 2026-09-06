@@ -1,0 +1,19 @@
+# API + serving
+fastapi
+uvicorn[standard]
+psycopg2-binary
+pandas
+numpy
+
+# Collector
+requests
+
+# ML pipeline (training / forecasting)
+torch
+scikit-learn
+pyarrow
+scipy
+
+# PM2.5 kriging rasters
+pykrige
+matplotlib

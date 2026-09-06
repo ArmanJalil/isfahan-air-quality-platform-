@@ -1,0 +1,12 @@
+# Python packages for the Isfahan AQ server (torch installed separately, CPU).
+numpy
+pandas
+scikit-learn
+pyarrow
+psycopg2-binary
+fastapi
+uvicorn[standard]
+pykrige
+scipy
+requests
+matplotlib

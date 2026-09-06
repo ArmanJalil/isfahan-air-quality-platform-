@@ -1,0 +1,38 @@
+# Secrets
+.env
+*.env
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+
+# Model artefacts & caches (too large / regenerable)
+*.pth
+*.pkl
+*.parquet
+*.h5
+_art_cache*.pkl
+models/step4*/
+aqf_serving/models/
+
+# Data & logs
+*.log
+*.csv
+*.tif
+*.tiff
+outputs/*.parquet
+
+# Tunnels / binaries (never commit)
+cloudflared*
+*.exe
+
+# Backups & editor
+_backup_*/
+.vs/
+.idea/
+.DS_Store

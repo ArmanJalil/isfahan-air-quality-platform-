@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>جزئیات ایستگاه — کیفیت هوای اصفهان</title>
+    <link rel="icon" href="assets/logo-center.png" />
+
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/vazirmatn@33.0.3/Vazirmatn-font-face.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+    <link rel="stylesheet" href="styles.css?v=30" />
+  </head>
+  <body>
+    <header class="topbar hero-bar">
+      <div class="hero-sharp"></div>
+      <div class="hero-overlay"></div>
+      <div class="hero-inner">
+        <div class="hero-brand">
+          <img
+            src="assets/logo-full2.png"
+            class="hero-logo"
+            alt="مرکز پایش و کنترل کیفیت هوای شهر اصفهان"
+          />
+          <p class="hero-sub" data-i18n="stationTitle">جزئیات ایستگاه</p>
+        </div>
+        <div class="hero-right">
+          <div class="hero-wxtime">
+            <div class="hero-weather">
+              <span class="hw-icon" id="hwIcon"></span>
+              <div class="hw-text">
+                <div class="hw-temp" id="hwTemp">—</div>
+                <div class="hw-cond" id="hwCond"></div>
+                <div class="hw-loc" id="hwLoc" data-i18n="loc">
+                  اصفهان، ایران
+                </div>
+              </div>
+            </div>
+            <div class="hero-div"></div>
+            <div class="hero-clock">
+              <div class="hc-date" id="hcDate"></div>
+              <div class="hc-time" id="hcTime">—</div>
+            </div>
+          </div>
+          <a id="backBtn" class="hero-lang" href="index.html" data-i18n="back"
+            >بازگشت به نقشه</a
+          >
+          <button id="langBtn" class="hero-lang">FA | EN</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="page layout" style="grid-template-columns: 1fr">
+      <section id="hero" class="card hero-card">
+        <div class="hero-gauge" id="heroGauge"></div>
+        <div class="hero-main">
+          <div class="hero-name" id="heroName">…</div>
+          <div class="hero-meta-row">
+            <div>
+              <span class="hero-k" data-i18n="currentAqi">شاخص کنونی</span>:
+              <span id="heroCat" class="hero-cat"></span>
+            </div>
+            <div id="heroDom" class="hero-dom"></div>
+          </div>
+          <div id="stwx" class="stwx"></div>
+        </div>
+      </section>
+
+      <!-- health advice for this station -->
+      <section id="advice" class="advice">
+        <img src="assets/heart.png" class="adv-heart" alt="" />
+        <div class="adv-ico" id="adviceIco"></div>
+        <div class="adv-body">
+          <div class="adv-h" data-i18n="adviceTitle">توصیه سلامت</div>
+          <div class="adv-t" id="adviceText">…</div>
+        </div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="hourlyAqiTitle">
+            شاخص ساعتی آلودگی هوا — ۴۸ ساعت گذشته و ۲۴ ساعت آینده
+          </h2>
+        </div>
+        <div class="haqi-wrap"><canvas id="hourlyAqiChart"></canvas></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="dailyTitle">
+            شاخص روزانه آلودگی هوا — ۵ روز گذشته و ۳ روز آینده
+          </h2>
+        </div>
+        <div class="daily-chart-wrap"><canvas id="dailyChart"></canvas></div>
+      </section>
+
+      <section class="card">
+        <div class="card-head">
+          <h2 data-i18n="pollutantsTitle">
+            آلاینده‌ها — ۴۸ ساعت گذشته و ۲۴ ساعت آینده
+          </h2>
+        </div>
+        <div id="pollGrid" class="poll-grid"></div>
+      </section>
+    </main>
+
+    <footer class="foot">
+      <img src="assets/logo-iut.png" class="foot-logo" alt="IUT" />
+      <span data-i18n="credit">طراحی و توسعه: دانشگاه صنعتی اصفهان</span>
+    </footer>
+
+    <script src="common.js?v=30"></script>
+    <script src="station.js?v=30"></script>
+  </body>
+</html>
